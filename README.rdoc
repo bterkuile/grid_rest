@@ -1,6 +1,80 @@
 = grid_rest
 
-Description goes here.
+grid_rest is a gem that makes your rails application interact with other backends through a REST interface. It is build in a situation where one rails application was talking to 2 java backends. 
+The main development focus is JSON communication, but XML should be just as easy.
+
+== Example configurations
+These configurations should be put in <tt>config/grid_rest.yml</tt>:
+
+=== General REST interface
+  include_in:
+  - ActiveRecord::Base
+  - ApplicationController
+  extend: ActiveRecord::Base  
+  development:
+    url_prefix: '/api/1.0'
+    host: localhost
+    port: 20400
+    logging: true
+
+  production:
+    url_prefix: '/api/1.0'
+    host: localhost
+    port: 20400
+    logging: true
+
+  test:
+    url_prefix: '/api/1.0'
+    host: localhost
+    port: 20400
+    logging: true
+
+=== Multiple REST interfaces
+  include_in:
+  - ActiveRecord::Base
+  - ApplicationController
+  extend: ActiveRecord::Base  
+  development:
+    zieook_workflow:
+      url_prefix: "/api/1.0/"
+      host: localhost
+      port: 20200
+      logging: true
+    zieook_data:
+      url_prefix: "/api/1.0"
+      host: localhost
+      port: 20100
+      logging: true
+
+  production:
+    zieook_workflow:
+      url_prefix: "/api/1.0/"
+      host: localhost
+      port: 20200
+      logging: true
+    zieook_data:
+      url_prefix: "/api/1.0"
+      host: localhost
+      port: 20100
+      logging: false
+
+  test:
+    zieook_workflow:
+      url_prefix: "/api/1.0/"
+      host: localhost
+      port: 20200
+      logging: true
+    zieook_data:
+      url_prefix: "/api/1.0"
+      host: localhost
+      port: 20100
+      logging: true
+=== Other ORM
+  include_in:
+  - MyOrm::Base
+  - ApplicationController
+  extend: MyOrm::Base  
+  ....
 
 == Contributing to grid_rest
  
@@ -10,10 +84,9 @@ Description goes here.
 * Start a feature/bugfix branch
 * Commit and push until you are happy with your contribution
 * Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
-* Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
 
 == Copyright
 
-Copyright (c) 2011 Benjamin ter Kuile. See LICENSE.txt for
+Copyright (c) 2011 GridLine. See LICENSE.txt for
 further details.
 
