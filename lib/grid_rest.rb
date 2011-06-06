@@ -1,5 +1,6 @@
 require 'rest_client'
 require 'active_support/all'
+require 'grid_rest/railtie'
 module GridRest 
   mattr_accessor :grid_config, :log_file
   class GridConfig < HashWithIndifferentAccess
