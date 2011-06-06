@@ -1,0 +1,1 @@
+GridRest.load_config!

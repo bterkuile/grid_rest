@@ -281,7 +281,6 @@ module GridRest
     end
   end
 end
-GridRest.load_config!
 
 # Arrays are valid, unless defined otherwise
 class Object
