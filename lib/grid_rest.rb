@@ -240,7 +240,9 @@ module GridRest
       false
     end
 
-    def try(*args)
+    def try(m, *args)
+      return send(m, *args) if respond_to?(m)
+      # Behave like a nil object otherwise
       nil
     end
 
@@ -266,7 +268,9 @@ module GridRest
     def valid?
       false
     end
-    def try(*args)
+    def try(m, *args)
+      return send(m, *args) if respond_to?(m)
+      # Behave like a nil object otherwise
       nil
     end
   end
