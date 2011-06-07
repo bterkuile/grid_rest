@@ -41,6 +41,10 @@ module GridRest
       def #{namespace}_delete(url, rparams = {})
         grid_rest_delete(url, rparams.merge(:grid_rest_namespace => '#{namespace}'))
       end
+      def #{namespace}_default_parameters(params, request_types = :global)
+        set_namespaced_default_grid_rest_parameters(:#{namespace}, params, request_types)
+      end
+      alias_method :set_#{namespace}_default_parameters, :#{namespace}_default_parameters
     END
   end
 
@@ -89,6 +93,52 @@ module GridRest
       @current_namespace
     end
 
+    # Global setter valid for all request/namespaces
+    def default_grid_rest_parameters(params, request_types = :global)
+      set_namespaced_default_grid_rest_parameters(:default, params, request_types)
+    end
+    alias_method :set_default_grid_rest_parameters, :default_grid_rest_parameters
+
+    # Return an array of additional parameters. This request is namespace aware
+    # It will return an array given the additional default parameters for:
+    #  ALL, GET, POST, PUT and DELETE
+    # requests in that order
+    def get_additional_grid_rest_parameters
+      globals = get_request_specific_additional_grid_rest_parameters(:global)
+      return [
+        globals,
+        globals.merge(get_request_specific_additional_grid_rest_parameters(:get)),
+        globals.merge(get_request_specific_additional_grid_rest_parameters(:post)),
+        globals.merge(get_request_specific_additional_grid_rest_parameters(:put)),
+        globals.merge(get_request_specific_additional_grid_rest_parameters(:delete))
+      ]
+    end
+
+    # Get all the global parameters. The defaults, extended/overwritten by the
+    # namespace specific ones
+    def get_request_specific_additional_grid_rest_parameters(request = :global)
+      if current_namespace
+        additional_grid_rest_parameters[:default][request].merge(additional_grid_rest_parameters[current_namespace.to_sym][request] || {})
+      else
+        additional_grid_rest_parameters[:default][request]
+      end
+    end
+
+    # Getter of additional parameters. Contains defaults and namespace specific versions
+    def additional_grid_rest_parameters
+      @additional_grid_rest_parameters ||= {
+        :default => {:global => {}, :get => {}, :post => {}, :put => {}, :delete => {}}
+      }
+    end
+    
+    def set_namespaced_default_grid_rest_parameters(ns, params, request_types = :global)
+      additional_grid_rest_parameters[ns] ||= {}
+      for request_type in Array.wrap(request_types).map(&:to_sym)
+        additional_grid_rest_parameters[ns][request_type] ||= {}
+        additional_grid_rest_parameters[ns][request_type].update(params)
+      end
+    end
+
     # Wrapper for grid_rest_log_message to write a log message in a consitant manner given the request parameters
     def grid_rest_log(method, url, rparams = {}, emsg = "")
       if current_namespace
@@ -114,10 +164,11 @@ module GridRest
       format = rparams.delete(:format) || {:get => :json, :post => :json, :put => :json}[method]
       accept = get_accept_header(format)
       @current_namespace = rparams.delete(:grid_rest_namespace) # Remove this setting from request parameters
+      additional_get_parameters, additional_post_parameters, additional_put_parameters, additional_delete_parameters = get_additional_grid_rest_parameters
       begin
         r = benchmark "Fetching #{method.to_s.upcase} #{relative_url} #{rparams.inspect}", :level => :debug do
           case method
-            when :get then RestClient.get rest_url, :params => rparams, :accept => accept
+            when :get then RestClient.get rest_url, :params => rparams.update(additional_get_parameters), :accept => accept
             when :post then
               if rparams[:json_data]
                 RestClient.post rest_url, rparams[:json_data].is_a?(Hash) ? rparams[:json_data].to_json : rparams[:json_data], :content_type => :json, :accept => :json
@@ -129,7 +180,7 @@ module GridRest
                 rparams[:headers] ||= {}
                 rparams[:headers][:accept] = accept
                 rparams[:multipart] = true
-                RestClient.post rest_url, rparams
+                RestClient.post rest_url, rparams.update(additional_post_parameters)
               end
             when :put then 
               if rparams[:json_data]
@@ -142,7 +193,7 @@ module GridRest
                 rparams[:headers] ||= {}
                 rparams[:headers][:accept] = accept
                 rparams[:multipart] = true
-                RestClient.put rest_url, rparams
+                RestClient.put rest_url, rparams.update(additional_put_parameters)
               end
             when :delete then
               if rparams[:json_data]
@@ -155,7 +206,7 @@ module GridRest
                 rparams[:headers] ||= {}
                 rparams[:headers][:accept] = accept
                 rparams[:multipart] = true
-                RestClient.delete rest_url, :params => rparams
+                RestClient.delete rest_url, :params => rparams.update(additional_delete_parameters)
               end
             else
               raise "No proper method (#{method}) for a grid_rest_request call"
