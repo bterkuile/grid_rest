@@ -1,6 +1,6 @@
 require 'rest_client'
 require 'active_support/all'
-require 'grid_rest/railtie'
+require 'grid_rest/engine'
 module GridRest 
   mattr_accessor :grid_config, :log_file, :additional_parameters
   self.additional_parameters = { :default => {:global => {}, :get => {}, :post => {}, :put => {}, :delete => {}} }

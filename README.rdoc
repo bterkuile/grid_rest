@@ -9,7 +9,7 @@ These configurations should be put in <tt>config/grid_rest.yml</tt>:
 === General REST interface
   include_in:
   - ActiveRecord::Base
-  - ApplicationController
+  - ActionController::Base
   extend: ActiveRecord::Base  
   development:
     url_prefix: '/api/1.0'
@@ -32,7 +32,7 @@ These configurations should be put in <tt>config/grid_rest.yml</tt>:
 === Multiple REST interfaces
   include_in:
   - ActiveRecord::Base
-  - ApplicationController
+  - ActionController::Base
   extend: ActiveRecord::Base  
   development:
     zieook_workflow:
@@ -72,7 +72,7 @@ These configurations should be put in <tt>config/grid_rest.yml</tt>:
 === Other ORM
   include_in:
   - MyOrm::Base
-  - ApplicationController
+  - ActionController::Base
   extend: MyOrm::Base  
   ....
 
