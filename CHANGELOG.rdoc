@@ -1,4 +1,8 @@
 = CHANGELOG
 
+== 2011-06-08 v0.0.2
+* Initialization fixes
+* Setting default parameters 
+
 == 2011-06-07 v0.0.1
 * Initial release
