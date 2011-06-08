@@ -2,7 +2,8 @@ require 'rest_client'
 require 'active_support/all'
 require 'grid_rest/railtie'
 module GridRest 
-  mattr_accessor :grid_config, :log_file
+  mattr_accessor :grid_config, :log_file, :additional_parameters
+  self.additional_parameters = { :default => {:global => {}, :get => {}, :post => {}, :put => {}, :delete => {}} }
   class GridConfig < HashWithIndifferentAccess
     # This allows for method like calling of the configuration. For example:
     #   GridRest.grid_config.host
@@ -14,6 +15,7 @@ module GridRest
     end
   end
   self.grid_config = GridConfig.new
+
   def self.include_in(klass)
     klass.send(:include, GridRestExtensions)
     self.grid_config.namespaces.keys.each do |k|
@@ -126,9 +128,7 @@ module GridRest
 
     # Getter of additional parameters. Contains defaults and namespace specific versions
     def additional_grid_rest_parameters
-      @additional_grid_rest_parameters ||= {
-        :default => {:global => {}, :get => {}, :post => {}, :put => {}, :delete => {}}
-      }
+      GridRest.additional_parameters
     end
     
     def set_namespaced_default_grid_rest_parameters(ns, params, request_types = :global)
@@ -171,9 +171,11 @@ module GridRest
             when :get then RestClient.get rest_url, :params => rparams.update(additional_get_parameters), :accept => accept
             when :post then
               if rparams[:json_data]
-                RestClient.post rest_url, rparams[:json_data].is_a?(Hash) ? rparams[:json_data].to_json : rparams[:json_data], :content_type => :json, :accept => :json
+                rparams[:json_data] = rparams[:json_data].merge(additional_post_parameters).to_json if rparams[:json_data].is_a?(Hash)
+                RestClient.post rest_url, rparams[:json_data], :content_type => :json, :accept => :json
               elsif rparams[:xml_data]
-                RestClient.post rest_url, rparams[:xml_data].is_a?(Hash) ? rparams[:xml_data].to_xml : rparams[:xml_data], :content_type => :xml, :accept => :xml
+                rparams[:xml_data] = rparams[:xml_data].merge(additional_post_parameters).to_xml if rparams[:xml_data].is_a?(Hash)
+                RestClient.post rest_url, rparams[:xml_data], :content_type => :xml, :accept => :xml
               elsif rparams[:binary]
                 RestClient.post rest_url, rparams[:binary], :content_type => 'binary/octet-stream'
               else
@@ -182,11 +184,13 @@ module GridRest
                 rparams[:multipart] = true
                 RestClient.post rest_url, rparams.update(additional_post_parameters)
               end
-            when :put then 
+            when :put then
               if rparams[:json_data]
-                RestClient.put rest_url, rparams[:json_data].is_a?(Hash) ? rparams[:json_data].to_json : rparams[:json_data], :content_type => :json, :accept => :json
+                rparams[:json_data] = rparams[:json_data].merge(additional_put_parameters).to_json if rparams[:json_data].is_a?(Hash)
+                RestClient.put rest_url, rparams[:json_data], :content_type => :json, :accept => :json
               elsif rparams[:xml_data]
-                RestClient.put rest_url, rparams[:xml_data].is_a?(Hash) ? rparams[:xml_data].to_xml : rparams[:xml_data], :content_type => :xml, :accept => :xml
+                rparams[:xml_data] = rparams[:xml_data].merge(additional_put_parameters).to_xml if rparams[:xml_data].is_a?(Hash)
+                RestClient.put rest_url, rparams[:xml_data], :content_type => :xml, :accept => :xml
               elsif rparams[:binary]
                 RestClient.put rest_url, rparams[:binary], :content_type => 'binary/octet-stream'
               else
@@ -197,16 +201,18 @@ module GridRest
               end
             when :delete then
               if rparams[:json_data]
-                RestClient.delete rest_url, rparams[:json_data].is_a?(Hash) ? rparams[:json_data].to_json : rparams[:json_data], :content_type => :json, :accept => :json
+                rparams[:json_data] = rparams[:json_data].merge(additional_delete_parameters).to_json if rparams[:json_data].is_a?(Hash)
+                RestClient.delete rest_url, rparams[:json_data], :content_type => :json, :accept => :json
               elsif rparams[:xml_data]
-                RestClient.delete rest_url, rparams[:xml_data].is_a?(Hash) ? rparams[:xml_data].to_xml : rparams[:xml_data], :content_type => :xml, :accept => :xml
+                rparams[:xml_data] = rparams[:xml_data].merge(additional_delete_parameters).to_xml if rparams[:xml_data].is_a?(Hash)
+                RestClient.delete rest_url, rparams[:xml_data], :content_type => :xml, :accept => :xml
               elsif rparams[:binary]
                 RestClient.delete rest_url, rparams[:binary], :content_type => 'binary/octet-stream'
               else
                 rparams[:headers] ||= {}
                 rparams[:headers][:accept] = accept
                 rparams[:multipart] = true
-                RestClient.delete rest_url, :params => rparams.update(additional_delete_parameters)
+                RestClient.delete rest_url, rparams.update(additional_delete_parameters)
               end
             else
               raise "No proper method (#{method}) for a grid_rest_request call"
