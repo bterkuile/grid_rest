@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{grid_rest}
-  s.version = "0.0.1"
+  s.version = "0.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Benjamin ter Kuile"]
-  s.date = %q{2011-06-07}
+  s.date = %q{2011-06-08}
   s.description = %q{grid_rest is a gem that makes your rails application interact with other backends through a REST interface. It is build in a situation where one rails application was talking to 2 java backends. 
     The main development focus is JSON communication, but XML should be just as easy}
   s.email = %q{bterkuile@gmail.com}
@@ -19,13 +19,15 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     ".document",
+    "CHANGELOG.rdoc",
     "Gemfile",
     "LICENSE.txt",
     "README.rdoc",
     "Rakefile",
     "VERSION",
+    "grid_rest.gemspec",
     "lib/grid_rest.rb",
-    "lib/grid_rest/railtie.rb",
+    "lib/grid_rest/engine.rb",
     "test/helper.rb",
     "test/test_grid_rest.rb"
   ]
