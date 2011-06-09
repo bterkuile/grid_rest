@@ -224,6 +224,7 @@ module GridRest
           r = benchmark("decoding response JSON", :level => :debug ){ JSON.parse(r.body) rescue r }
         end
         # Singleton class extensions
+        r = "" if r == false # RestClient problem giving false on empty 204
         def r.valid?
           true
         end
