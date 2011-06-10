@@ -2,6 +2,7 @@ require 'rest_client'
 require 'active_support/all'
 require 'grid_rest/engine'
 module GridRest 
+  RESERVED_REQUEST_PARAMETERS = %[accept content_type headers method url payload timeout open_timeout raw_response verify_ssl ssl_client_cert ssl_client_key ssl_ca_file cookie cookies accept_encoding]
   mattr_accessor :grid_config, :log_file, :additional_parameters
   self.additional_parameters = { :default => {:global => {}, :get => {}, :post => {}, :put => {}, :delete => {}} }
   class GridConfig < HashWithIndifferentAccess
@@ -200,20 +201,8 @@ module GridRest
                 RestClient.put rest_url, rparams.update(additional_put_parameters)
               end
             when :delete then
-              if rparams[:json_data]
-                rparams[:json_data] = rparams[:json_data].merge(additional_delete_parameters).to_json if rparams[:json_data].is_a?(Hash)
-                RestClient.delete rest_url, rparams[:json_data], :content_type => :json, :accept => :json
-              elsif rparams[:xml_data]
-                rparams[:xml_data] = rparams[:xml_data].merge(additional_delete_parameters).to_xml if rparams[:xml_data].is_a?(Hash)
-                RestClient.delete rest_url, rparams[:xml_data], :content_type => :xml, :accept => :xml
-              elsif rparams[:binary]
-                RestClient.delete rest_url, rparams[:binary], :content_type => 'binary/octet-stream'
-              else
-                rparams[:headers] ||= {}
-                rparams[:headers][:accept] = accept
-                rparams[:multipart] = true
-                RestClient.delete rest_url, rparams.update(additional_delete_parameters)
-              end
+              new_uri = add_parameters_to_uri(rest_url, rparams.update(additional_delete_parameters))
+              RestClient.delete(new_uri, rparams)
             else
               raise "No proper method (#{method}) for a grid_rest_request call"
             end
@@ -239,6 +228,15 @@ module GridRest
         grid_rest_log method, rest_url, rparams, "error in request"
       end
       r
+    end
+
+    def add_parameters_to_uri(uri, params)
+      uri << '?' unless uri.include?('?')
+      uri << '&' unless ['?', '&'].include?(uri.last)
+      uri_params = params.reject{|k, v| RESERVED_REQUEST_PARAMETERS.include?(k.to_s)}
+      uri_params.each{|k, v| params.delete(k)} # Remove added get parameters from the header params
+      uri << uri_params.map{|k, v| URI.encode("#{k}=#{v}")}.join('&')
+      uri
     end
 
     def generate_url(url, rparams = {})

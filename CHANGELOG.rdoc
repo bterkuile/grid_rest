@@ -1,4 +1,7 @@
 = CHANGELOG
+== v0.0.3
+* Transform empty RestClient false to empty string
+* Serialize parameters for delete request
 
 == 2011-06-08 v0.0.2
 * Initialization fixes
