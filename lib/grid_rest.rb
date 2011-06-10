@@ -24,6 +24,10 @@ module GridRest
     end
   end
 
+  def self.default_parameters(params, namespace = :default)
+    additional_parameters[namespace].update(params)
+  end
+
   def self.extend_class(klass)
     klass.send(:extend, GridRestExtensions)
     self.grid_config.namespaces.keys.each do |k|
