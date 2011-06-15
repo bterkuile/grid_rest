@@ -2,7 +2,7 @@ require 'rest_client'
 require 'active_support/all'
 require 'grid_rest/engine'
 module GridRest 
-  RESERVED_REQUEST_PARAMETERS = %[accept content_type headers method url payload timeout open_timeout raw_response verify_ssl ssl_client_cert ssl_client_key ssl_ca_file cookie cookies accept_encoding]
+  RESERVED_REQUEST_PARAMETERS = %w[accept content_type headers method url payload timeout open_timeout raw_response verify_ssl ssl_client_cert ssl_client_key ssl_ca_file cookie cookies accept_encoding]
   mattr_accessor :grid_config, :log_file, :additional_parameters
   self.additional_parameters = { :default => {:global => {}, :get => {}, :post => {}, :put => {}, :delete => {}} }
   class GridConfig < HashWithIndifferentAccess
@@ -24,8 +24,8 @@ module GridRest
     end
   end
 
-  def self.default_parameters(params, namespace = :default)
-    additional_parameters[namespace].update(params)
+  def self.default_parameters(params, type = :global, namespace = :default)
+    additional_parameters[namespace][type].update(params)
   end
 
   def self.extend_class(klass)
@@ -205,6 +205,8 @@ module GridRest
                 RestClient.put rest_url, rparams.update(additional_put_parameters)
               end
             when :delete then
+              rparams[:headers] ||= {}
+              rparams[:headers][:accept] = accept
               new_uri = add_parameters_to_uri(rest_url, rparams.update(additional_delete_parameters))
               RestClient.delete(new_uri, rparams)
             else
@@ -238,8 +240,8 @@ module GridRest
       uri << '?' unless uri.include?('?')
       uri << '&' unless ['?', '&'].include?(uri.last)
       uri_params = params.reject{|k, v| RESERVED_REQUEST_PARAMETERS.include?(k.to_s)}
-      uri_params.each{|k, v| params.delete(k)} # Remove added get parameters from the header params
       uri << uri_params.map{|k, v| URI.encode("#{k}=#{v}")}.join('&')
+      uri_params.each{|k, v| params.delete(k)} # Remove added get parameters from the header params
       uri
     end
 
