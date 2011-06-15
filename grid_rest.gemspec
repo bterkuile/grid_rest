@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{grid_rest}
-  s.version = "0.0.2"
+  s.version = "0.0.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Benjamin ter Kuile"]
-  s.date = %q{2011-06-08}
+  s.date = %q{2011-06-15}
   s.description = %q{grid_rest is a gem that makes your rails application interact with other backends through a REST interface. It is build in a situation where one rails application was talking to 2 java backends. 
     The main development focus is JSON communication, but XML should be just as easy}
   s.email = %q{bterkuile@gmail.com}
