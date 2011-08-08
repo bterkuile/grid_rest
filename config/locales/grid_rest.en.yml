@@ -1,102 +1,101 @@
 en:
   grid_rest:
     error:
-      general: Er is iets fout gegaan bij het benaderen van de backend
-      resource not found: Het backendgedeelte kan niet worden gevonden
-      unavailable: De backend server is momenteel niet beschikbaar
-      connection refused: Verbinding met backend niet geslaagd
-      json parsing: Backend json response kan niet worden geïnterpreteerd
-      xml parsing: Backend xml response kan niet worden geïnterpreteerd
-
       for response type: There was a problem with the request (%{type})
       for response code: There was a problem with the request (%{code})
     message:
-      ECONNREFUSED: Could not connect to server
+      ECONNREFUSED: The connection to the server could not be established
+      RequestTimeout: De server timed out
+      ServerBrokeConnection: The server has disconnected
 
-      HTTPContinue: HTTPContinue
-      HTTPSwitchProtocol: HTTPSwitchProtocol
-      HTTPOK: HTTPOK
-      HTTPCreated: HTTPCreated
-      HTTPAccepted: HTTPAccepted
-      HTTPNonAuthoritativeInformation: HTTPNonAuthoritativeInformation
-      HTTPNoContent: HTTPNoContent
-      HTTPResetContent: HTTPResetContent
-      HTTPPartialContent: HTTPPartialContent
+      Continue: Continue
+      SwitchProtocol: SwitchProtocol
+      Processing: Processing (WebDAV)
+      
+      OK: OK
+      Created: Created
+      Accepted: Accepted
+      NonAuthoritativeInformation: NonAuthoritativeInformation
+      NoContent: NoContent
+      ResetContent: ResetContent
+      PartialContent: PartialContent
 
-      HTTPMultipleChoice: HTTPMultipleChoice
-      HTTPMovedPermanently: HTTPMovedPermanently
-      HTTPFound: HTTPFound
-      HTTPSeeOther: HTTPSeeOther
-      HTTPNotModified: HTTPNotModified
-      HTTPUseProxy: HTTPUseProxy
-      HTTPTemporaryRedirect: HTTPTemporaryRedirect
+      MultipleChoice: MultipleChoice
+      MovedPermanently: MovedPermanently
+      Found: Found
+      SeeOther: SeeOther
+      NotModified: NotModified
+      UseProxy: UseProxy
+      TemporaryRedirect: TemporaryRedirect
 
-      HTTPBadRequest: HTTPBadRequest
-      HTTPUnauthorized: HTTPUnauthorized
-      HTTPPaymentRequired: HTTPPaymentRequired
-      HTTPForbidden: HTTPForbidden
-      HTTPNotFound: HTTPNotFound
-      HTTPMethodNotAllowed: HTTPMethodNotAllowed
-      HTTPNotAcceptable: HTTPNotAcceptable
-      HTTPProxyAuthenticationRequired: HTTPProxyAuthenticationRequired
-      HTTPRequestTimeOut: HTTPRequestTimeOut
-      HTTPConflict: HTTPConflict
-      HTTPGone: HTTPGone
-      HTTPLengthRequired: HTTPLengthRequired
-      HTTPPreconditionFailed: HTTPPreconditionFailed
-      HTTPRequestEntityTooLarge: HTTPRequestEntityTooLarge
-      HTTPRequestURITooLong: HTTPRequestURITooLong
-      HTTPUnsupportedMediaType: HTTPUnsupportedMediaType
-      HTTPRequestedRangeNotSatisfiable: HTTPRequestedRangeNotSatisfiable
-      HTTPExpectationFailed: HTTPExpectationFailed
+      BadRequest: BadRequest
+      Unauthorized: Unauthorized
+      PaymentRequired: PaymentRequired
+      Forbidden: Forbidden
+      NotFound: NotFound
+      MethodNotAllowed: MethodNotAllowed
+      NotAcceptable: NotAcceptable
+      ProxyAuthenticationRequired: ProxyAuthenticationRequired
+      RequestTimeOut: RequestTimeOut
+      Conflict: Conflict
+      Gone: Gone
+      LengthRequired: LengthRequired
+      PreconditionFailed: PreconditionFailed
+      RequestEntityTooLarge: RequestEntityTooLarge
+      RequestURITooLong: RequestURITooLong
+      UnsupportedMediaType: UnsupportedMediaType
+      RequestedRangeNotSatisfiable: RequestedRangeNotSatisfiable
+      ExpectationFailed: ExpectationFailed
 
-      HTTPInternalServerError: HTTPInternalServerError
-      HTTPNotImplemented: HTTPNotImplemented
-      HTTPBadGateway: HTTPBadGateway
-      HTTPServiceUnavailable: HTTPServiceUnavailable
-      HTTPGatewayTimeOut: HTTPGatewayTimeOut
-      HTTPVersionNotSupported: HTTPVersionNotSupported
+      InternalServerError: InternalServerError
+      NotImplemented: NotImplemented
+      BadGateway: BadGateway
+      ServiceUnavailable: ServiceUnavailable
+      GatewayTimeOut: GatewayTimeOut
+      VersionNotSupported: VersionNotSupported
     code:
-      100: HTTPContinue
-      101: HTTPSwitchProtocol
-      200: HTTPOK
-      201: HTTPCreated
-      202: HTTPAccepted
-      203: HTTPNonAuthoritativeInformation
-      204: HTTPNoContent
-      205: HTTPResetContent
-      206: HTTPPartialContent
+      100: Continue
+      101: SwitchProtocol
+      102: Processing
 
-      300: HTTPMultipleChoice
-      301: HTTPMovedPermanently
-      302: HTTPFound
-      303: HTTPSeeOther
-      304: HTTPNotModified
-      305: HTTPUseProxy
-      307: HTTPTemporaryRedirect
+      200: OK
+      201: Created
+      202: Accepted
+      203: NonAuthoritativeInformation
+      204: NoContent
+      205: ResetContent
+      206: PartialContent
 
-      400: HTTPBadRequest
-      401: HTTPUnauthorized
-      402: HTTPPaymentRequired
-      403: HTTPForbidden
-      404: HTTPNotFound
-      405: HTTPMethodNotAllowed
-      406: HTTPNotAcceptable
-      407: HTTPProxyAuthenticationRequired
-      408: HTTPRequestTimeOut
-      409: HTTPConflict
-      410: HTTPGone
-      411: HTTPLengthRequired
-      412: HTTPPreconditionFailed
-      413: HTTPRequestEntityTooLarge
-      414: HTTPRequestURITooLong
-      415: HTTPUnsupportedMediaType
-      416: HTTPRequestedRangeNotSatisfiable
-      417: HTTPExpectationFailed
+      300: MultipleChoice
+      301: MovedPermanently
+      302: Found
+      303: SeeOther
+      304: NotModified
+      305: UseProxy
+      307: TemporaryRedirect
 
-      500: HTTPInternalServerError
-      501: HTTPNotImplemented
-      502: HTTPBadGateway
-      503: HTTPServiceUnavailable
-      504: HTTPGatewayTimeOut
-      505: HTTPVersionNotSupported
+      400: BadRequest
+      401: Unauthorized
+      402: PaymentRequired
+      403: Forbidden
+      404: NotFound
+      405: MethodNotAllowed
+      406: NotAcceptable
+      407: ProxyAuthenticationRequired
+      408: RequestTimeOut
+      409: Conflict
+      410: Gone
+      411: LengthRequired
+      412: PreconditionFailed
+      413: RequestEntityTooLarge
+      414: RequestURITooLong
+      415: UnsupportedMediaType
+      416: RequestedRangeNotSatisfiable
+      417: ExpectationFailed
+
+      500: InternalServerError
+      501: NotImplemented
+      502: BadGateway
+      503: ServiceUnavailable
+      504: GatewayTimeOut
+      505: VersionNotSupported
