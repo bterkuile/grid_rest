@@ -325,6 +325,7 @@ module GridRest
       @code = e.code
       @url = e.url
       @request_method = e.request_method
+      @response = e.response
     end
     def to_s
       ''

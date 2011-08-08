@@ -7,9 +7,12 @@ en:
       connection refused: Verbinding met backend niet geslaagd
       json parsing: Backend json response kan niet worden geïnterpreteerd
       xml parsing: Backend xml response kan niet worden geïnterpreteerd
-      for response class: There was a problem with the request (%{response})
+
+      for response type: There was a problem with the request (%{type})
       for response code: There was a problem with the request (%{code})
     message:
+      ECONNREFUSED: Could not connect to server
+
       HTTPContinue: HTTPContinue
       HTTPSwitchProtocol: HTTPSwitchProtocol
       HTTPOK: HTTPOK
