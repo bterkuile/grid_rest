@@ -11,7 +11,7 @@ module Rails
   end
 
   def self.logger
-    Logger.new(File.join(root, 'test_out.log'))
+    Logger.new(File.join(root, 'log', 'test.log'))
   end
   class Engine
     def self.config(*args)

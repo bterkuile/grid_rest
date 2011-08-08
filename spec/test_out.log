@@ -1,7 +1,0 @@
-# Logfile created on Mon Aug 08 15:56:17 +0200 2011 by logger.rb/22285
-Fetching GET search.json {:q=>"grid_rest"} (471.0ms)
-decoding response JSON (0.0ms)
-Fetching GET search.json {:q=>"grid_rest"} (467.2ms)
-decoding response JSON (0.0ms)
-Fetching GET search.json {:q=>"grid_rest"} (534.4ms)
-decoding response JSON (0.0ms)
