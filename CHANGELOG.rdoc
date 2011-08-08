@@ -1,4 +1,8 @@
 = CHANGELOG
+== v0.0.4
+* Better error message control
+* Initialize some testing
+
 == v0.0.3
 * Transform empty RestClient false to empty string
 * Serialize parameters for delete request

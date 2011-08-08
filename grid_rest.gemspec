@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{grid_rest}
-  s.version = "0.0.3"
+  s.version = "0.0.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Benjamin ter Kuile"]
@@ -29,7 +29,8 @@ Gem::Specification.new do |s|
     "lib/grid_rest.rb",
     "lib/grid_rest/engine.rb",
     "test/helper.rb",
-    "test/test_grid_rest.rb"
+    "test/test_grid_rest.rb",
+    "config/**/*"
   ]
   s.homepage = %q{http://github.com/bterkuile/grid_rest}
   s.licenses = ["MIT"]
