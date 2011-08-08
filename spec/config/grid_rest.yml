@@ -1,0 +1,8 @@
+include_in: GridRestTest
+extend: GridRestTest
+test:
+  url_prefix: "/"
+  host: search.twitter.com
+  port: 80
+  logging: true
+

@@ -224,13 +224,13 @@ module GridRest
           true
         end
       rescue RestClient::ResourceNotFound => e
-        r = Error.new('resource not found', :url => rest_url, :code => e.http_code, :method => method)
+        r = Error.new(e, :url => rest_url, :method => method)
         grid_rest_log method, rest_url, rparams, "resource not found response"
-      rescue Errno::ECONNREFUSED
-        r = Error.new('connection refused', :url => rest_url, :code => 404, :method => method)
+      rescue Errno::ECONNREFUSED => e
+        r = Error.new(e, :url => rest_url, :method => method)
         grid_rest_log method, rest_url, rparams, "connection refused response"
       rescue => e
-        r = Error.new "general", :url => rest_url, :code => e.respond_to?(:http_code) ? e.http_code : 500, :method => method
+        r = Error.new e, :url => rest_url, :method => method 
         grid_rest_log method, rest_url, rparams, "error in request"
       end
       r
@@ -283,13 +283,16 @@ module GridRest
   # with a normal request, but most importantly returns false on the 
   # valid? question.
   class Error
-    attr_reader :message, :code, :url, :request_method
-    def initialize(message = nil, rparams = {})
-      @message = I18n.t(message, :scope => [:grid_rest, :error])
-      @code = rparams.delete(:code)
+    attr_reader :message, :code, :url, :request_method, :response, :type
+    def initialize(e, rparams)
+      @request_method = rparams.delete(:request_method) || rparams.delete(:method)
+      @code = e.respond_to?(:http_code) ? e.http_code : (rparams.delete(:code) || 500)
+      @response = e.response if e.respond_to?(:response)
+      @type = e.class.name.split('::').last
+      @message = I18n.t(@type, :scope => [:grid_rest, :message], :default => nil)
       @url = rparams.delete(:url)
-      @request_method = rparams.delete(:request_method)
     end
+
     def code
       @code || 500
     end
@@ -316,7 +319,7 @@ module GridRest
   end
 
   class ErrorArray < Array
-    attr_reader :message, :code, :url, :request_method
+    attr_reader :message, :code, :url, :request_method, :response
     def initialize(e)
       @message = e.message
       @code = e.code

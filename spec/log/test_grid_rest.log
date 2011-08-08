@@ -1,0 +1,8 @@
+2011-08-08 15:56:42 GET http://localhost:20400/api/1.0/hi connection refused response
+2011-08-08 16:07:41 GET http://localhost:20400/api/1.0/hi connection refused response
+2011-08-08 16:13:21 GET https://www.google.com:80/language/translate/v2/detect error in request
+2011-08-08 16:20:18 GET http://search.twitter.com:80/search.json with {:q=>"grid_rest"} response code: 200
+2011-08-08 16:22:26 GET http://search.twitter.com:80/search.json with {:q=>"grid_rest"} response code: 200
+2011-08-08 16:22:26 GET http://search.twitter.com:80/nonexistent error in request
+2011-08-08 16:23:01 GET http://search.twitter.com:80/search.json with {:q=>"grid_rest"} response code: 200
+2011-08-08 16:23:02 GET http://search.twitter.com:80/nonexistent error in request
