@@ -8,8 +8,8 @@ describe GridRestTest do
   it "should give 404 on nonexistent" do
     r = GridRestTest.grid_rest_get('nonexistent')
     r.code.should == 404
-    r.type.should == 'HTTPNotFound'
-    r.message.should == 'HTTPNotFound'
+    r.type.should == 'ResourceNotFound'
+    r.message.should == 'Resource could not be found'
   end
 end
 

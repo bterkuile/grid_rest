@@ -1,4 +1,7 @@
 = CHANGELOG
+== 2011-10-02 v0.0.5
+* Support for arrays with :json_data or :xml_data specification
+
 == v0.0.4
 * Better error message control
 * Initialize some testing

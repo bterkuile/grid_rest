@@ -33,6 +33,8 @@ end
 
 require 'grid_rest'
 require 'capybara/rspec'
+require 'i18n'
+I18n.load_path << Dir[File.join(Rails.root, '..', 'config', 'locales', '*.{rb,yml}')]
 
 RSpec.configure do |config|
   config.mock_with :rspec
