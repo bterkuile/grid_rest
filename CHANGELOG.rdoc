@@ -1,4 +1,8 @@
 = CHANGELOG
+== 2011-10-11 v0.0.6
+* Working upport for arrays with :json_data or :xml_data specification
+* Fix namespacing issue
+
 == 2011-10-02 v0.0.5
 * Support for arrays with :json_data or :xml_data specification
 

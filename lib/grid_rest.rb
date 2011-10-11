@@ -67,6 +67,7 @@ module GridRest
     h[Rails.env].each do |k, v|
       if v.is_a?(Hash)
         self.grid_config.namespaces[k.to_sym] = HashWithIndifferentAccess.new(v)
+        self.additional_parameters[k.to_sym] = self.additional_parameters[:default].deep_dup # Copy default structure
       else
         self.grid_config[k.to_sym] = v
       end
@@ -176,10 +177,12 @@ module GridRest
             when :get then RestClient.get rest_url, :params => rparams.update(additional_get_parameters), :accept => accept
             when :post then
               if rparams[:json_data]
-                rparams[:json_data] = rparams[:json_data].merge(additional_post_parameters).to_json if rparams[:json_data].is_a?(Hash) || rparams[:json_data].is_a?(Array)
+                rparams[:json_data] = rparams[:json_data].merge(additional_post_parameters).to_json if rparams[:json_data].is_a?(Hash)
+                rparams[:json_data] = rparams[:json_data].to_json if rparams[:json_data].is_a?(Array)
                 RestClient.post rest_url, rparams[:json_data], :content_type => :json, :accept => :json
               elsif rparams[:xml_data]
-                rparams[:xml_data] = rparams[:xml_data].merge(additional_post_parameters).to_xml if rparams[:xml_data].is_a?(Hash) || rparams[:json_data].is_a?(Array)
+                rparams[:xml_data] = rparams[:xml_data].merge(additional_post_parameters).to_xml if rparams[:xml_data].is_a?(Hash)
+                rparams[:xml_data] = rparams[:xml_data].to_xml if rparams[:xml_data].is_a?(Array)
                 RestClient.post rest_url, rparams[:xml_data], :content_type => :xml, :accept => :xml
               elsif rparams[:binary]
                 RestClient.post rest_url, rparams[:binary], :content_type => 'binary/octet-stream'
@@ -191,10 +194,12 @@ module GridRest
               end
             when :put then
               if rparams[:json_data]
-                rparams[:json_data] = rparams[:json_data].merge(additional_put_parameters).to_json if rparams[:json_data].is_a?(Hash) || rparams[:json_data].is_a?(Array)
+                rparams[:json_data] = rparams[:json_data].merge(additional_put_parameters).to_json if rparams[:json_data].is_a?(Hash)
+                rparams[:json_data] = rparams[:json_data].to_json if rparams[:json_data].is_a?(Array)
                 RestClient.put rest_url, rparams[:json_data], :content_type => :json, :accept => :json
               elsif rparams[:xml_data]
-                rparams[:xml_data] = rparams[:xml_data].merge(additional_put_parameters).to_xml if rparams[:xml_data].is_a?(Hash) || rparams[:json_data].is_a?(Array)
+                rparams[:xml_data] = rparams[:xml_data].merge(additional_put_parameters).to_xml if rparams[:xml_data].is_a?(Hash)
+                rparams[:xml_data] = rparams[:xml_data].to_xml if rparams[:xml_data].is_a?(Array)
                 RestClient.put rest_url, rparams[:xml_data], :content_type => :xml, :accept => :xml
               elsif rparams[:binary]
                 RestClient.put rest_url, rparams[:binary], :content_type => 'binary/octet-stream'
