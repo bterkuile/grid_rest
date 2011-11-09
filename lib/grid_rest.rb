@@ -168,6 +168,9 @@ module GridRest
       #return Error.new('unavailable', :url => rest_url) unless grid_rest?(rparams)
       # Specify defaults per method for format
       format = rparams.delete(:format) || {:get => :json, :post => :json, :put => :json}[method]
+
+      # By default try to decode the response, but allow deactivating this feature
+      decode_response = rparams.has_key?(:decode_response) ? rparams.delete(:decode_response) : true
       accept = get_accept_header(format)
       @current_namespace = rparams.delete(:grid_rest_namespace) # Remove this setting from request parameters
       additional_get_parameters, additional_post_parameters, additional_put_parameters, additional_delete_parameters = get_additional_grid_rest_parameters
@@ -219,7 +222,7 @@ module GridRest
             end
           end
         grid_rest_log method, rest_url, rparams, "response code: #{r.code}"
-        if format == :json
+        if format == :json && decode_response
           #r = benchmark("decoding response JSON", :level => :debug ){ ActiveSupport::JSON.decode(r.body) rescue r } # Slow
           r = benchmark("decoding response JSON", :level => :debug ){ JSON.parse(r.body) rescue r }
         end
