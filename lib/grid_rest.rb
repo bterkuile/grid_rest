@@ -239,7 +239,7 @@ module GridRest
         grid_rest_log method, rest_url, rparams, "connection refused response"
       rescue => e
         r = Error.new e, :url => rest_url, :method => method 
-        grid_rest_log method, rest_url, rparams, "error in request"
+        grid_rest_log method, rest_url, rparams, "error in request: " + r.to_s
       end
       r
     end
@@ -304,9 +304,12 @@ module GridRest
     def code
       @code || 500
     end
+
+    # Return the content of the request, so you can use it for debugging.
     def to_s
-      ''
+      @response.to_s
     end
+
     alias to_str to_s
 
     def valid?
